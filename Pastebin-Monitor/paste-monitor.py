@@ -13,8 +13,8 @@ import os.path
 def pastebin():
     """Search the archive of pastebin.com and get all the download links"""
 
-    fdirpb = "/media/preto/DESCARGAS/pastebins/"
-    urlpbd = "http://pastebin.com/download.php?i="
+    fdirpb = "/media/preto/DESCARGAS/pastebins/"  # Directorio donde se guardaran los pastes
+    urlpbd = "http://pastebin.com/download.php?i="  # URL de descarga
     contents = urllib.urlopen("http://pastebin.com/archive")
     bs = BeautifulSoup(contents, "lxml")
     link = bs.find_all('table', {'class': 'maintable'})
@@ -24,13 +24,16 @@ def pastebin():
         for h in href:
             if 'href' in h.attrs:
                 if 'archive' not in h['href']:
-                    filepb = h['href'][1:]
+                    filepb = h['href'][1:]  # URL de cada enlace encontrado que contiene pastes
                     if filterurl(urlpbd+filepb) is True:
                         download(urlpbd+filepb, filepb, fdirpb)
 
 
 def download(url, fname, fdir):
-    """"Write the file to a folder only if don't exist."""
+    """"Write the file to a folder only if don't exist.
+         url - URL of the file to download.
+         fname - Name for the downloaded file.
+         fdir - Name of folder where the file will be downloaded."""
 
     if os.path.isfile(fdir+fname) is not True:
 
@@ -49,17 +52,16 @@ def download(url, fname, fdir):
 
 
 def filterurl(urlf):
-    """Check if a word is in the file."""
+    """Check if a word is in the file.
+        urlf - URL of the file to download and filter. """
 
     words = ["password", "passwd", "root", "@gmail.com", "DATABASE:", "login", "DB DUMP"]
-    filterurl = urllib.urlopen(urlf)
-    for f in filterurl:
+    filt = urllib.urlopen(urlf)
+    for f in filt:
         for w in words:
             if w in f:
                 print f
                 return True
 
 
-#download("http://pastebin.com/download.php?i=qhCjGFhe","qhCjGFhe","./pastebins/")
-#filterurl("http://pastebin.com/download.php?i=qhCjGFhe")
 pastebin()
