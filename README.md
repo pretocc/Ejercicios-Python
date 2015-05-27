@@ -1,1 +1,1 @@
-Pruebas de programación en python.
+Pruebas de programación en Python 2.7
